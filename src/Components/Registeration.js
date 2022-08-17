@@ -20,8 +20,6 @@ function Registration() {
     const [users, setUsers] = useState([]);
     const [msg, setMsg] = useState("");
 
-
-
     function handleFormSubmit(e) {
         e.preventDefault();
 
@@ -30,13 +28,35 @@ function Registration() {
             setMsg("Please fill in every field");
             return false;
         }
-        let existingUsers = JSON.parse(localStorage.getItem("users"));
-        if (existingUsers.filter(x => x.email === email).length) {
-            setFlag(true);
-            setMsg("A user with this email ID already exists");
-            return false;
-        }
 
+
+        // if (!localStorage.getItem("users")) {
+        //     const pass = passRef.current.value;
+        //     const hashedPassword = bcrypt.hashSync(pass, 10);
+        //     const userObj = {
+        //         name: name,
+        //         email: email,
+        //         hashedPassword: hashedPassword,
+        //         phone: phone,
+        //         address: address,
+        //         isApproved: true,
+        //         role: 'admin'
+        //     }
+        //     let arr = [];
+        //     arr.push(userObj);
+
+        //     localStorage.setItem('users', JSON.stringify(arr));
+
+        // }
+        //else {
+        let existingUsers = JSON.parse(localStorage.getItem("users"));
+        if (existingUsers !== null) {
+            if (existingUsers.filter(x => x.email === email).length) {
+                setFlag(true);
+                setMsg("A user with this email ID already exists");
+                return false;
+            }
+        }
         setFlag(false);
 
         const pass = passRef.current.value;

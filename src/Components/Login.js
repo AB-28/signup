@@ -13,31 +13,39 @@ function Login() {
     const [flag, setFlag] = useState(false);
 
     const [home, setHome] = useState(true);
+    const [msg, setMsg] = useState("");
 
     function handleLogin(e) {
         e.preventDefault();
 
-        // console.log(JSON.parse(localStorage.getItem('users')));
-        const getEmail = JSON.parse(localStorage.getItem("users")).email;
-        //const getEmail = JSON.parse(localStorage.getItem('users')).email;
-        const getHashedPassword = JSON.parse(localStorage.getItem("users")).hashedPassword;
-        const getIsApproved = JSON.parse(localStorage.getItem("users")).isApproved;
+        const getUsers = JSON.parse(localStorage.getItem('users'));
+        //If email or password field is empty 
         if (!emaillog || !passwordlog) {
             setFlag(true);
+            setMsg("Enter all details. ")
             console.log("EMPTY");
-        } else {
-            bcrypt.compare(passwordlog, getHashedPassword, function (err, isMatch) {
+        }
+        //checj if entered email & password exists in local storage
+        else {
+            const user = getUsers.filter((val) => {
+                return val.email === emaillog
+            })[0];
+
+            //compare the password
+            bcrypt.compare(passwordlog, user.hashedPassword, function (err, isMatch) {
                 if (err) {
                     throw err;
                 }
-                else if (!isMatch || emaillog !== getEmail) {
+                else if (!isMatch || emaillog !== user.email) {
                     setFlag(true);
+                    setMsg("Incorrect email ID or password");
                     console.log("Doesn't match");
                 }
-                // else if (getIsApproved === false) {
-                //     setFlag(true);
-                //     console.log("This email ID is not approved by admin. ");
-                // }
+                else if (user.isApproved === false) {
+                    setFlag(true);
+                    setMsg("Waiting for approval from admin. ")
+                    console.log("This email ID is not approved by admin. ");
+                }
                 else {
                     setHome(!home);
                     setFlag(false);
@@ -76,6 +84,8 @@ function Login() {
                                 onChange={(event) => setPasswordlog(event.target.value)}
                             />
                         </div>
+                        <br />
+                        <br />
 
                         <button type="submit" className="btn btn-dark btn-lg btn-block">
                             Login
@@ -83,7 +93,7 @@ function Login() {
 
                         {flag && (
                             <Alert color="primary" variant="warning">
-                                Fill correct information.
+                                {msg}
                             </Alert>
                         )}
                     </form>
