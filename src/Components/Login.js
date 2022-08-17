@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Alert } from "react-bootstrap";
 import Home from "./Home";
 import bcrypt from 'bcryptjs';
+//import bcrypt from 'bcrypt';
 
 
 function Login() {
@@ -16,11 +17,11 @@ function Login() {
     function handleLogin(e) {
         e.preventDefault();
 
-        console.log(JSON.parse(localStorage.getItem('user')));
-        const getEmail = JSON.parse(localStorage.getItem('user')).email;
-
-        const getHashedPassword = JSON.parse(localStorage.getItem('user')).hashedPassword;
-        const getIsApproved = JSON.parse(localStorage.getItem('user')).isApproved;
+        // console.log(JSON.parse(localStorage.getItem('users')));
+        const getEmail = JSON.parse(localStorage.getItem("users")).email;
+        //const getEmail = JSON.parse(localStorage.getItem('users')).email;
+        const getHashedPassword = JSON.parse(localStorage.getItem("users")).hashedPassword;
+        const getIsApproved = JSON.parse(localStorage.getItem("users")).isApproved;
         if (!emaillog || !passwordlog) {
             setFlag(true);
             console.log("EMPTY");
