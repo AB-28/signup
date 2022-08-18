@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Alert } from "react-bootstrap";
+import { Link, Navigate } from "react-router-dom";
 import Home from "./Home";
 import bcrypt from 'bcryptjs';
-//import bcrypt from 'bcrypt';
-
 
 function Login() {
 
@@ -14,18 +13,20 @@ function Login() {
 
     const [home, setHome] = useState(true);
     const [msg, setMsg] = useState("");
+    const [admin, setAdmin] = useState(false);
 
     function handleLogin(e) {
         e.preventDefault();
 
         const getUsers = JSON.parse(localStorage.getItem('users'));
+
         //If email or password field is empty 
         if (!emaillog || !passwordlog) {
             setFlag(true);
             setMsg("Enter all details. ")
             console.log("EMPTY");
         }
-        //checj if entered email & password exists in local storage
+        //check if entered email & password exists in local storage
         else {
             const user = getUsers.filter((val) => {
                 return val.email === emaillog
@@ -46,17 +47,17 @@ function Login() {
                     setMsg("Waiting for approval from admin. ")
                     console.log("This email ID is not approved by admin. ");
                 }
+                else if (user.role === 'admin') {
+                    setAdmin(true);
+                }
                 else {
                     setHome(!home);
                     setFlag(false);
                     console.log("match");
                 }
-
             });
         }
-
     }
-    // isApproved login pr show krna hai. 
 
     return (
         <>
@@ -64,7 +65,8 @@ function Login() {
             <div>
                 {home ? (
                     <form onSubmit={handleLogin}>
-                        <h3>LogIn</h3>
+                        <h1>Log In</h1>
+                        <br />
                         <div className="form-group">
                             <label>Email</label>
                             <input
@@ -90,11 +92,21 @@ function Login() {
                         <button type="submit" className="btn btn-dark btn-lg btn-block">
                             Login
                         </button>
+                        <br />
+                        <br />
+                        <button type="primary" className="btn btn-dark btn-lg btn-block">
+                            <Link style={{ textDecoration: 'none', color: 'white' }} to="/signup">Sign Up</Link>
+                        </button>
 
                         {flag && (
                             <Alert color="primary" variant="warning">
                                 {msg}
                             </Alert>
+                        )}
+                        {admin && (
+
+                            <Navigate replace to="/admin" />
+
                         )}
                     </form>
                 ) : (

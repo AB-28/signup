@@ -18,4 +18,3 @@ export function Routing() {
     );
 }
 
-/* <Link to="/signup">Sign Up</Link> */ 

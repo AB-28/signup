@@ -51,26 +51,28 @@ function Admin() {
                 <tbody>
 
                     {userObj.map(user => {
-                        return (
-                            <tr>
-                                <td>
-                                    {user.name}
-                                </td>
-                                <td>
-                                    {user.email}
-                                </td>
-                                <td>
-                                    {user.phone}
-                                </td>
-                                <td>
-                                    {user.isApproved
-                                        ? <button className="btn btn-secondary" onClick={() => handleReject(user.email)}> Reject  </button> //onclick function send email, and set isApprove to be true. change in local storage, by set item. use map for set item. 
-                                        : <button className="btn btn-secondary" onClick={() => handleApprove(user.email)}> Approve </button>
-                                    }
-                                </td>
-                            </tr>
+                        if (user.role === 'user') {
+                            return (
+                                <tr>
+                                    <td>
+                                        {user.name}
+                                    </td>
+                                    <td>
+                                        {user.email}
+                                    </td>
+                                    <td>
+                                        {user.phone}
+                                    </td>
+                                    <td>
+                                        {user.isApproved
+                                            ? <button className="btn btn-secondary" onClick={() => handleReject(user.email)}> Reject  </button> //onclick function send email, and set isApprove to be true. change in local storage, by set item. use map for set item. 
+                                            : <button className="btn btn-secondary" onClick={() => handleApprove(user.email)}> Approve </button>
+                                        }
+                                    </td>
+                                </tr>
 
-                        )
+                            )
+                        }
                     })}
                 </tbody>
             </Table>
